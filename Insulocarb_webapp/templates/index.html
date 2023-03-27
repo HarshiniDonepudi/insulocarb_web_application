@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #a5c8eb;
+    }
+    </style>
+	<title>Detector</title>
+	 <!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.3/css/mdb.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+
+
+    </ul>
+    
+  </div>
+</nav>
+<br/>
+<br/>
+
+<div class="jumbotron" style="background:#0686e4;color:#fff">
+    <div class="container">
+      <h1 class="display-3">INSULOCARB &nbsp;</h1>
+      <p>Using Deep Learning</p>
+      
+    </div>
+  </div>
+<br/>
+
+<div class="container" >
+	
+	 {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    
+    {% for message in messages %}
+        
+           <h4>{{ message }}</h4>
+      
+    {% endfor %}
+    
+  {% else %} 
+  <h3><p>Instructions</p><br></h3>
+    <h4><p>1) Take a clear image of the meal plate being consumed </p>
+    <p>2) Click on the upload button and select the image of the meal plate</p>
+    <p>Note:For accurate results separate the food items being taken on the meal plate</p></h4> 
+  {% endif %}
+{% endwith %}
+	
+{% block body %}{% endblock %}
+	
+	
+	
+	
+   <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file class="btn btn-primary" name=file>
+       <br/><br/>
+         <button type="submit" class="btn btn-primary">Upload</button>
+    
+
+
+ 
+
+
+</form>
+</div>
+<div class="container">
+	
+		
+<form action="/predict" method=post>
+      
+         <button type="submit" class="btn btn-primary">Detect</button>
+         <br/><br/>
+         
+     
+         
+</form>
+
+
+  
+
+
+
+<form action="/show" method=get>
+      
+         <button type="submit" class="btn btn-primary"> Show &nbsp;	</button>
+         
+         
+</form>
+
+
+        <br/>
+         
+         <button onclick= 'removeFun()'class="btn btn-primary" >Clear</button>
+
+         
+
+
+	<br/><br/>
+          	<h4>Prediction</h4>
+			
+				
+
+		
+<img id = image src = "{{ url_for('static', filename ='prediction.jpg') }}"placeholder="/Users/harshinisaidonepudi/Downloads/Fashion-Detection-DeepFashion2-Detectron2-Flask-master/restaurant.png" width =500>		
+<div class="container" >
+ <br/><br/>
+        <h3 margin:10px>Images</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Confidence</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                {% for image in data %}
+                    <tr>
+                        <td>{{ image.name }}</td>
+                        <td>{{ image.confidence }}</td>
+                    
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+     
+  </div>	
+<div>
+  <br/><br/>
+  <h3>Calorie Calculation</h3>
+  <p>The items detected on the plate are:</p>
+  <form action="{{ url_for('calculate')}}" method=post>
+  <table style="width:100%">
+    <thead>
+      <tr>
+        <th>Food Items</th>
+        <th>Quantity(gms)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in names %}
+      <tr>
+          <td><label for="names{{ i }}">{{i}}</label></td>
+          <td><input type="text" name="names{{i}}" id="names{{i}}"></td>
+      
+      </tr>
+       {% endfor %}
+       
+<td >
+      
+  <input type="submit" value="Submit">
+  <br/><br/>
+  
+
+  
+</td>
+    </tbody>
+    </table>
+    </form>
+</div>
+<!-- <div>
+  <h4>Nutrient Content in Meal</h4>
+  <img src="{{ url_for('static', filename='pie_chart.png') }}">
+</div> -->
+			<div>
+        <h1>{{n}}</h1>
+      </div>
+		
+</div>
+
+	<br/>
+  <br/>
+  <br/>
+
+
+<script>
+  function removeFun() {
+    document.getElementById("image").src="https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png";
+  }
+  function upload(){
+    if(document.getElementById("image").src=="{{ url_for('static', filename ='prediction.jpg') }}"){
+      document.getElementById("image").src=="{{ url_for('static', filename ='image.jpg') }}"
+
+
+    }
+  }
+</script>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.3/js/mdb.min.js"></script>
+
+</body>
+
+
+</html>
